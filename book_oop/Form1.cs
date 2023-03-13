@@ -28,20 +28,40 @@ namespace book_oop
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            LoadRecord();
+            filldataTable();
         }
-        private void LoadRecord()
+        DataTable dataTable = new DataTable();
+
+        //Tampilan MySql
+        public DataTable getDataTable()
         {
-            dataGridView1.Rows.Clear();
-            conn.Open();
-            cmd = new MySqlCommand("SELECT `id`,`nama_buku`, `kode_buku`, `jumlah_buku`, `tanggal`, `deskripsi`, `nama_pembeli`, `no_hp` FROM `db_book`", conn);
-            dr = cmd.ExecuteReader();
-            while (dr.Read())
+            resetIncrement();
+            dataTable.Reset();
+            dataTable = new DataTable();
+            using (MySqlCommand command = new MySqlCommand("SELECT * FROM db_book", conn))
             {
-                dataGridView1.Rows.Add(dataGridView1.Rows.Count + 1, dr["id"].ToString(), dr["nama_buku"].ToString(), dr["kode_buku"].ToString(),dr["jumlah_buku"].ToString(), dr["tanggal"].ToString(), dr["deskripsi"].ToString(), dr["nama_pembeli"].ToString(), dr["no_hp"].ToString());
+                conn.Open();
+
+                MySqlDataReader reader = command.ExecuteReader();
+                dataTable.Load(reader);
             }
-            dr.Close();
-            conn.Close();
+            return dataTable;
+        }
+
+        public void filldataTable()
+        {
+            dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.RowTemplate.Height = 200;
+            dataGridView1.DataSource = getDataTable();
+            Column1.DataPropertyName = "id";
+            Column2.DataPropertyName = "nama_buku";
+            Column3.DataPropertyName = "kode_buku";
+            Column4.DataPropertyName = "jumlah_buku";
+            Column5.DataPropertyName = "tanggal";
+            Column6.DataPropertyName = "deskripsi";
+            Column7.DataPropertyName = "nama_pembeli";
+            Column8.DataPropertyName = "no_hp";
+            Column9.DataPropertyName = "gambar";
         }
         public void clear()
         {
@@ -53,22 +73,30 @@ namespace book_oop
             txt_deskripsi.Clear();
             txt_nama_pembeli.Clear();
             txt_nohp.Clear();
+            pictureBox2.Image=null;
         }
 
         private void btn_tambah_Click(object sender, EventArgs e)
         {
-            if ((txt_nama_buku.Text == string.Empty) || (txt_kode.Text == string.Empty) || (txt_jumlah.Text == string.Empty) || (txt_tanggal.Text == string.Empty) || (txt_deskripsi.Text == string.Empty) || (txt_nama_pembeli.Text == string.Empty)||(txt_nohp.Text == string.Empty))
+            if ((txt_nama_buku.Text == string.Empty) || (txt_kode.Text == string.Empty) || (txt_jumlah.Text == string.Empty) || (txt_tanggal.Text == string.Empty) || (txt_deskripsi.Text == string.Empty) || (txt_nama_pembeli.Text == string.Empty)||(txt_nohp.Text == string.Empty)||(pictureBox2.Image==null))
             {
                 MessageBox.Show("Warning : Required Failed ?", "CRUD", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
-
             }
             else
             {
                 resetIncrement();
+                // Convert image to byte array
+                byte[] imageData;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    pictureBox2.Image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    imageData = ms.ToArray();
+                }
+
                 string date1 = txt_tanggal.Value.ToString("yyyy-MM-dd");
-                conn.Open();
-                cmd = new MySqlCommand("INSERT INTO `db_book`(`nama_buku`, `kode_buku`, `jumlah_buku`, `tanggal`, `deskripsi`, `nama_pembeli`,`no_hp`) VALUES (@nama_buku,@kode_buku,@jumlah_buku,@tanggal,@deskripsi,@nama_pembeli,@no_hp)", conn);
+                //conn.Open();
+                cmd = new MySqlCommand("INSERT INTO `db_book`(`nama_buku`, `kode_buku`, `jumlah_buku`, `tanggal`, `deskripsi`, `nama_pembeli`,`no_hp`,`gambar`) VALUES (@nama_buku,@kode_buku,@jumlah_buku,@tanggal,@deskripsi,@nama_pembeli,@no_hp,@gambar)", conn);
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@nama_buku", txt_nama_buku.Text);
                 cmd.Parameters.AddWithValue("@kode_buku", txt_kode.Text);
@@ -77,6 +105,7 @@ namespace book_oop
                 cmd.Parameters.AddWithValue("@deskripsi", txt_deskripsi.Text);
                 cmd.Parameters.AddWithValue("@nama_pembeli", txt_nama_pembeli.Text);
                 cmd.Parameters.AddWithValue("@no_hp", txt_nohp.Text);
+                cmd.Parameters.AddWithValue("@gambar", imageData);
 
                 i = cmd.ExecuteNonQuery();
                 if (i > 0)
@@ -88,7 +117,7 @@ namespace book_oop
                     MessageBox.Show("Record Save Failed !", "CRUD", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 conn.Close();
-                LoadRecord();
+                filldataTable();
                 clear();
             }
         }
@@ -100,9 +129,17 @@ namespace book_oop
 
         private void btn_edit_Click(object sender, EventArgs e)
         {
+            // Convert image to byte array
+            byte[] imageData;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                pictureBox2.Image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                imageData = ms.ToArray();
+            }
+            cmd = conn.CreateCommand();
             string date1 = txt_tanggal.Value.ToString("yyyy-MM-dd");
-            conn.Open();
-            cmd = new MySqlCommand("UPDATE `db_book` SET `nama_buku`=@nama_buku,`kode_buku`=@kode_buku,`jumlah_buku`=@jumlah_buku,`tanggal`=@tanggal,`deskripsi`=@deskripsi,`nama_pembeli`=@nama_pembeli,`no_hp`=@no_hp WHERE `id`=@id", conn);
+            //conn.Open();
+            cmd.CommandText = "UPDATE db_book SET nama_buku= @nama_buku, kode_buku = @kode_buku, jumlah_buku = @jumlah_buku, tanggal = @tanggal, deskripsi = @deskripsi ,nama_pembeli = @nama_pembeli,no_hp=@no_hp, gambar=@gambar WHERE id = @id";
             cmd.Parameters.Clear();
             cmd.Parameters.AddWithValue("@id", txt_id.Text);
             cmd.Parameters.AddWithValue("@nama_buku", txt_nama_buku.Text);
@@ -112,6 +149,7 @@ namespace book_oop
             cmd.Parameters.AddWithValue("@deskripsi", txt_deskripsi.Text);
             cmd.Parameters.AddWithValue("@nama_pembeli", txt_nama_pembeli.Text);
             cmd.Parameters.AddWithValue("@no_hp", txt_nohp.Text);
+            cmd.Parameters.AddWithValue("@gambar", imageData);
 
             i = cmd.ExecuteNonQuery();
             if (i > 0)
@@ -123,13 +161,13 @@ namespace book_oop
                 MessageBox.Show("Record Update Failed !", "CRUD", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             conn.Close();
-            LoadRecord();
+            filldataTable();
             clear();
         }
 
         private void btn_hapus_Click(object sender, EventArgs e)
         {
-            conn.Open();
+            //conn.Open();
             cmd = new MySqlCommand("DELETE FROM `db_book` WHERE `id`=@id", conn);
             cmd.Parameters.Clear();
             cmd.Parameters.AddWithValue("@id", txt_id.Text);
@@ -145,7 +183,8 @@ namespace book_oop
                 MessageBox.Show("Record Delete Failed !", "CRUD", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             conn.Close();
-            LoadRecord();
+            resetIncrement();
+            filldataTable();
             clear();
         }
 
@@ -159,16 +198,14 @@ namespace book_oop
 
         }
 
-        private void txt_cari_TextChanged_1(object sender, EventArgs e)
+        private void txt_cari_TextChanged_1(string ValueToFind )
         {
-            dataGridView1.Rows.Clear();
-            conn.Open();
-            cmd = new MySqlCommand("SELECT `id`, `nama_buku`, `kode_buku`, `jumlah_buku`, `tanggal`, `deskripsi`, `nama_pembeli`, `no_hp` FROM db_book WHERE id like '%" + txt_cari.Text + "%' or nama_buku like '%" + txt_cari.Text + "%' or kode_buku like '%" + txt_cari.Text + "%' or jumlah_buku like '%" + txt_cari.Text + "%' or tanggal like '%" + txt_cari.Text + "%' or deskripsi like '%" + txt_cari.Text + "%' or nama_pembeli like '%" + txt_cari.Text + "%' or no_hp like '%" + txt_cari.Text + "%'", conn);
-            dr = cmd.ExecuteReader();
-            while (dr.Read())
-            {
-                dataGridView1.Rows.Add(dataGridView1.Rows.Count + 1, dr["id"].ToString(), dr["nama_buku"].ToString(), dr["kode_buku"].ToString(), dr["jumlah_buku"].ToString(), dr["tanggal"].ToString(), dr["deskripsi"].ToString(), dr["nama_pembeli"].ToString(), dr["no_hp"].ToString());
-            }
+            string searchQuery = "SELECT * FROM db_book WHERE CONCAT (id, nama_buku, kode_buku, jumlah_buku, tanggal, deskripsi, nama_pembeli, no_hp) LIKE '%" + ValueToFind + "%'";
+            MySqlDataAdapter adapter = new MySqlDataAdapter(searchQuery, conn);
+            DataTable table = new DataTable();
+            adapter.Fill(table);
+            dataGridView1.DataSource = table;
+
             dr.Close();
             conn.Close();
 
@@ -177,14 +214,43 @@ namespace book_oop
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int id = Convert.ToInt32(dataGridView1.CurrentCell.RowIndex.ToString());
-            txt_id.Text = dataGridView1.Rows[id].Cells[1].Value.ToString();
-            txt_nama_buku.Text = dataGridView1.Rows[id].Cells[2].Value.ToString();
-            txt_kode.Text = dataGridView1.Rows[id].Cells[3].Value.ToString();
-            txt_jumlah.Text = dataGridView1.Rows[id].Cells[4].Value.ToString();
+            txt_id.Text = dataGridView1.Rows[id].Cells[0].Value.ToString();
+            txt_nama_buku.Text = dataGridView1.Rows[id].Cells[1].Value.ToString();
+            txt_kode.Text = dataGridView1.Rows[id].Cells[2].Value.ToString();
+            txt_jumlah.Text = dataGridView1.Rows[id].Cells[3].Value.ToString();
 
-            txt_deskripsi.Text = dataGridView1.Rows[id].Cells[6].Value.ToString();
-            txt_nama_pembeli.Text = dataGridView1.Rows[id].Cells[7].Value.ToString();
-            txt_nohp.Text = dataGridView1.Rows[id].Cells[8].Value.ToString();
+            txt_deskripsi.Text = dataGridView1.Rows[id].Cells[5].Value.ToString();
+            txt_nama_pembeli.Text = dataGridView1.Rows[id].Cells[6].Value.ToString();
+            txt_nohp.Text = dataGridView1.Rows[id].Cells[7].Value.ToString();
+            Byte[] img = (Byte[])dataGridView1.CurrentRow.Cells[8].Value;
+            MemoryStream ms = new MemoryStream(img);
+            pictureBox2.Image = Image.FromStream(ms);
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openfd = new OpenFileDialog();
+            openfd.Filter = "Image Files (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp";
+            if (openfd.ShowDialog() == DialogResult.OK)
+            {
+                pictureBox2.Image = new Bitmap(openfd.FileName);
+            }
+
+        }
+
+        public void searchData(string ValueToFind)
+        {
+            string searchQuery = "SELECT * FROM db_book WHERE CONCAT (id, nama_buku, kode_buku, jumlah_buku, tanggal, deskripsi, nama_pembeli, no_hp,gambar) LIKE '%" + ValueToFind + "%'";
+            MySqlDataAdapter adapter = new MySqlDataAdapter(searchQuery, conn);
+            DataTable table = new DataTable();
+            adapter.Fill(table);
+            dataGridView1.DataSource = table;
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            searchData(textBox2.Text);
         }
     }
 }

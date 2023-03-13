@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -44,7 +45,6 @@
             this.txt_nohp = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,6 +52,7 @@
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column9 = new System.Windows.Forms.DataGridViewImageColumn();
             this.btn_tambah = new System.Windows.Forms.Button();
             this.btn_edit = new System.Windows.Forms.Button();
             this.btn_clear = new System.Windows.Forms.Button();
@@ -64,9 +65,14 @@
             this.label9 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.txt_tanggal = new System.Windows.Forms.DateTimePicker();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.textBox2 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -182,38 +188,30 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
-            this.Column9,
             this.Column2,
             this.Column3,
             this.Column4,
             this.Column5,
             this.Column6,
             this.Column7,
-            this.Column8});
+            this.Column8,
+            this.Column9});
             this.dataGridView1.Location = new System.Drawing.Point(416, 198);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 33;
-            this.dataGridView1.Size = new System.Drawing.Size(1214, 414);
+            this.dataGridView1.Size = new System.Drawing.Size(1414, 414);
             this.dataGridView1.TabIndex = 17;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // Column1
             // 
-            this.Column1.HeaderText = "#";
+            this.Column1.HeaderText = "Id";
             this.Column1.MinimumWidth = 8;
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
-            this.Column1.Width = 50;
-            // 
-            // Column9
-            // 
-            this.Column9.HeaderText = "Id";
-            this.Column9.MinimumWidth = 8;
-            this.Column9.Name = "Column9";
-            this.Column9.ReadOnly = true;
-            this.Column9.Width = 50;
+            this.Column1.Width = 150;
             // 
             // Column2
             // 
@@ -265,16 +263,26 @@
             // 
             // Column8
             // 
-            this.Column8.HeaderText = "No Hp";
+            this.Column8.HeaderText = "No hp";
             this.Column8.MinimumWidth = 8;
             this.Column8.Name = "Column8";
             this.Column8.ReadOnly = true;
             this.Column8.Width = 150;
             // 
+            // Column9
+            // 
+            this.Column9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column9.HeaderText = "Gambar";
+            this.Column9.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.Column9.MinimumWidth = 8;
+            this.Column9.Name = "Column9";
+            this.Column9.ReadOnly = true;
+            this.Column9.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
             // btn_tambah
             // 
             this.btn_tambah.BackColor = System.Drawing.Color.Lime;
-            this.btn_tambah.Location = new System.Drawing.Point(158, 559);
+            this.btn_tambah.Location = new System.Drawing.Point(416, 618);
             this.btn_tambah.Name = "btn_tambah";
             this.btn_tambah.Size = new System.Drawing.Size(112, 34);
             this.btn_tambah.TabIndex = 18;
@@ -285,7 +293,7 @@
             // btn_edit
             // 
             this.btn_edit.BackColor = System.Drawing.Color.Yellow;
-            this.btn_edit.Location = new System.Drawing.Point(159, 599);
+            this.btn_edit.Location = new System.Drawing.Point(417, 658);
             this.btn_edit.Name = "btn_edit";
             this.btn_edit.Size = new System.Drawing.Size(112, 34);
             this.btn_edit.TabIndex = 19;
@@ -296,7 +304,7 @@
             // btn_clear
             // 
             this.btn_clear.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.btn_clear.Location = new System.Drawing.Point(277, 559);
+            this.btn_clear.Location = new System.Drawing.Point(535, 618);
             this.btn_clear.Name = "btn_clear";
             this.btn_clear.Size = new System.Drawing.Size(112, 34);
             this.btn_clear.TabIndex = 20;
@@ -307,7 +315,7 @@
             // btn_hapus
             // 
             this.btn_hapus.BackColor = System.Drawing.Color.Red;
-            this.btn_hapus.Location = new System.Drawing.Point(277, 599);
+            this.btn_hapus.Location = new System.Drawing.Point(535, 658);
             this.btn_hapus.Name = "btn_hapus";
             this.btn_hapus.Size = new System.Drawing.Size(112, 34);
             this.btn_hapus.TabIndex = 21;
@@ -333,11 +341,10 @@
             // 
             // txt_cari
             // 
-            this.txt_cari.Location = new System.Drawing.Point(478, 161);
+            this.txt_cari.Location = new System.Drawing.Point(0, 0);
             this.txt_cari.Name = "txt_cari";
-            this.txt_cari.Size = new System.Drawing.Size(578, 31);
-            this.txt_cari.TabIndex = 24;
-            this.txt_cari.TextChanged += new System.EventHandler(this.txt_cari_TextChanged_1);
+            this.txt_cari.Size = new System.Drawing.Size(100, 31);
+            this.txt_cari.TabIndex = 30;
             // 
             // label8
             // 
@@ -355,7 +362,7 @@
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(6, 5);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1624, 150);
+            this.panel1.Size = new System.Drawing.Size(1824, 150);
             this.panel1.TabIndex = 26;
             // 
             // label9
@@ -387,12 +394,49 @@
             this.txt_tanggal.Size = new System.Drawing.Size(231, 31);
             this.txt_tanggal.TabIndex = 27;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Gray;
+            this.pictureBox2.Location = new System.Drawing.Point(157, 560);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(232, 149);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 28;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(23, 560);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(75, 25);
+            this.label10.TabIndex = 29;
+            this.label10.Text = "Gambar";
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(474, 161);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(705, 31);
+            this.textBox2.TabIndex = 31;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1633, 664);
+            this.ClientSize = new System.Drawing.Size(1830, 721);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.txt_tanggal);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label8);
@@ -425,6 +469,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -453,8 +498,15 @@
         private System.Windows.Forms.TextBox txt_id;
         private System.Windows.Forms.Label label_id;
         private System.Windows.Forms.TextBox txt_cari;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.DateTimePicker txt_tanggal;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
@@ -462,10 +514,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.DateTimePicker txt_tanggal;
+        private System.Windows.Forms.DataGridViewImageColumn Column10;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.DataGridViewImageColumn Column9;
     }
 }
